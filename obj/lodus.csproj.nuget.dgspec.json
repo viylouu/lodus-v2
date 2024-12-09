@@ -50,6 +50,20 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "SimulationFramework": {
+              "target": "Package",
+              "version": "[0.3.0-alpha.11, )"
+            },
+            "SimulationFramework.Desktop": {
+              "target": "Package",
+              "version": "[0.3.0-alpha.11, )"
+            },
+            "SimulationFramework.OpenGL": {
+              "target": "Package",
+              "version": "[0.3.0-alpha.11, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

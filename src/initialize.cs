@@ -1,0 +1,13 @@
+﻿using SimulationFramework;
+
+partial class lodus {
+    static void Main() {
+        Simulation sim = Simulation.Create(init, rend);
+        sim.Run();
+    }
+
+    static void init() {
+        Window.Title = "lodus";
+        Simulation.SetFixedResolution(960,540,Color.Black);
+    }
+}

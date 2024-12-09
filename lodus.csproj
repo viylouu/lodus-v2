@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SimulationFramework" Version="0.3.0-alpha.11" />
+    <PackageReference Include="SimulationFramework.Desktop" Version="0.3.0-alpha.11" />
+    <PackageReference Include="SimulationFramework.OpenGL" Version="0.3.0-alpha.11" />
+  </ItemGroup>
+
 </Project>
