@@ -1,0 +1,14 @@
+E:\vscode stuff\lodus\bin\Debug\net8.0\lodus.exe
+E:\vscode stuff\lodus\bin\Debug\net8.0\lodus.deps.json
+E:\vscode stuff\lodus\bin\Debug\net8.0\lodus.runtimeconfig.json
+E:\vscode stuff\lodus\bin\Debug\net8.0\lodus.dll
+E:\vscode stuff\lodus\bin\Debug\net8.0\lodus.pdb
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.GeneratedMSBuildEditorConfig.editorconfig
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.AssemblyInfoInputs.cache
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.AssemblyInfo.cs
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.csproj.CoreCompileInputs.cache
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.dll
+E:\vscode stuff\lodus\obj\Debug\net8.0\refint\lodus.dll
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.pdb
+E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.genruntimeconfig.cache
+E:\vscode stuff\lodus\obj\Debug\net8.0\ref\lodus.dll
