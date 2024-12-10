@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("lodus")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54e23e1acd95c7ef284209fe3f5e6538ad7dbc9f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72b5746decf7ff4ed66f3e3f6044ba5a6f481c2f")]
 [assembly: System.Reflection.AssemblyProductAttribute("lodus")]
 [assembly: System.Reflection.AssemblyTitleAttribute("lodus")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
