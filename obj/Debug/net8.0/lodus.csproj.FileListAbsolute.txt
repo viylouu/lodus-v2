@@ -64,3 +64,8 @@ E:\vscode stuff\lodus\bin\Debug\net8.0\runtimes\win-x64\native\glfw3.dll
 E:\vscode stuff\lodus\bin\Debug\net8.0\runtimes\win-x86\native\glfw3.dll
 E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.csproj.AssemblyReference.cache
 E:\vscode stuff\lodus\obj\Debug\net8.0\lodus.csproj.Up2Date
+E:\vscode stuff\lodus\bin\Debug\net8.0\AssimpNet.dll
+E:\vscode stuff\lodus\bin\Debug\net8.0\runtimes\linux-x64\native\libassimp.so
+E:\vscode stuff\lodus\bin\Debug\net8.0\runtimes\osx-x64\native\libassimp.dylib
+E:\vscode stuff\lodus\bin\Debug\net8.0\runtimes\win-x64\native\assimp.dll
+E:\vscode stuff\lodus\bin\Debug\net8.0\runtimes\win-x86\native\assimp.dll

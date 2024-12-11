@@ -27,7 +27,7 @@ public class misc {
     static AssimpContext imp = new();
 
     /// <summary>loads an fbx file as a set of vertices (Vector3[]) indices (uint[]) and texture coordinates (Vector2[])</summary>
-    public static (Vector3[], uint[], Vector2[])? loadfbx(string path) {
+    public static (Vector3[], uint[], Vector2[]) loadfbx(string path) {
         Scene scene = imp.ImportFile(path, PostProcessSteps.Triangulate);
 
         Console.WriteLine($"loading fbx file at \"{path}\"");
@@ -52,7 +52,7 @@ public class misc {
                         inds.Add((uint)face.Indices[2]);
                     } else {
                         Console.WriteLine($"error! invalid face count ({face.IndexCount}) expected (3)");
-                        return null;
+                        return (null,null,null);
                     }
 
                 if(mesh.TextureCoordinateChannels[0] != null)
@@ -60,7 +60,7 @@ public class misc {
                         texcoords.Add(new(mesh.TextureCoordinateChannels[0][i].X,mesh.TextureCoordinateChannels[0][i].Y));
                 else {
                     Console.WriteLine("error! no texture coordinates found");
-                    return null;
+                    return (null,null,null);
                 }
             }
         else
