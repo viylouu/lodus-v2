@@ -27,7 +27,7 @@ public class fontie {
 
             for(int x = 0; x < _charw; x++)
                 for(int y = 0; y < _charh; y++)
-                    if(_tex.GetPixel(i*_charw+x,y).A > 0)
+                    if(_tex[i*_charw+x,y].A > 0)
                         w = x;
             
             font.data[i].width = w+2;
