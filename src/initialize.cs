@@ -1,5 +1,7 @@
 ﻿using SimulationFramework;
 using SimulationFramework.Drawing;
+using SimulationFramework.Input;
+
 using thrustr.basic;
 using thrustr.utils;
 
@@ -29,5 +31,7 @@ partial class lodus {
             for(int y = 0; y < 3; y++)
                 for(int z = 0; z < 3; z++)
                     gen_new_chunk(new(x,y,z));
+
+        Mouse.Visible = false;
     }
 }

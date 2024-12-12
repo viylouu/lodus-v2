@@ -47,7 +47,11 @@ partial class lodus {
     /* camera variables */
 
     static Vector3 cam;
-    static float pitch, yaw, pitchr, yawr;
+    static float pitch, yaw, pitchr, yawr, pitchs, yaws;
+
+    /* misc variables */
+
+    static bool fullscreen;
 
     static void rend(ICanvas c) {
         c.Clear(Color.CornflowerBlue);
@@ -58,6 +62,8 @@ partial class lodus {
 
         movement();
         camera();
+
+        misc_keybinds();
 
         vertex_shader.view = Matrix4x4.CreateTranslation(cam) * Matrix4x4.CreateRotationY(pitchr) * Matrix4x4.CreateRotationX(yawr);
         vertex_shader.proj = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 3f, c.Width / (float)c.Height, 0.1f, 1024f);
@@ -81,6 +87,20 @@ partial class lodus {
         fontie.rendertext(c, fontie.dfont, $"{math.round(1 / Time.DeltaTime)} fps", 3, 3, ColorF.White);
     }
 
+    private static void misc_keybinds() {
+        if (Keyboard.IsKeyPressed(Key.F11)) {
+            fullscreen = !fullscreen;
+
+            if (fullscreen)
+                Window.EnterFullscreen();
+            else
+                Window.ExitFullscreen();
+        }
+
+        if (Keyboard.IsKeyPressed(Key.Escape))
+            Environment.Exit(0);
+    }
+
     static void camera() {
         float center_x = math.round(Window.Width/2),
               center_y = math.round(Window.Height/2);
@@ -90,14 +110,17 @@ partial class lodus {
 
         yaw = math.clamp(yaw, -90, 90);
 
-        pitchr = math.rad(pitch);
-        yawr = math.rad(yaw);
+        pitchs += ease.dyn(pitchs, pitch, 6);
+        yaws += ease.dyn(yaws, yaw, 6);
+
+        pitchr = math.rad(pitchs);
+        yawr = math.rad(yaws);
 
         Mouse.Position = new(center_x, center_y);
     }
 
     static void movement() {
-        float speed = 64;
+        float speed = 16;
 
         if (Keyboard.IsKeyDown(Key.W))
             cam += new Vector3(math.cos(pitchr + math.pi / 2), 0, math.sin(pitchr + math.pi / 2)) * Time.DeltaTime * speed;
