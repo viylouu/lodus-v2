@@ -18,9 +18,9 @@ partial class lodus {
 
         (cube_verts, cube_inds, cube_uvs) = misc.loadfbx(@"assets\meshes\cube.fbx");
 
-        grass = Graphics.LoadTexture(@"assets\sprites\voxels\grass.png");
+        atlas = Graphics.LoadTexture(@"assets\sprites\voxels\atlas.png");
 
-        fragment_shader.tex = grass;
+        fragment_shader.tex = atlas;
         vertex_shader.chunk_size = chunk_size;
 
         dmask = Graphics.CreateDepthMask(960,540);

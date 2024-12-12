@@ -12,9 +12,7 @@ public struct vsdata {
 }
 
 public class chunk {
-    public Vector3[] mesh_verts;
     public uint[] mesh_inds;
-    public Vector2[] mesh_uvs;
     public vsdata[] mesh_data;
 
     public byte[,,] data;
@@ -40,7 +38,7 @@ partial class lodus {
 
     /* textures */
 
-    static ITexture grass;
+    static ITexture atlas;
 
     /* rendering variables */
 
@@ -75,6 +73,9 @@ partial class lodus {
             vertex_shader.chunk_pos = chunks[i].pos;
 
             c.DrawTriangles<vsdata>(chunks[i].mesh_data, chunks[i].mesh_inds);
+
+            //bad (i think) do something else later
+            c.Flush();
         }
 
         fontie.rendertext(c, fontie.dfont, $"{math.round(1 / Time.DeltaTime)} fps", 3, 3, ColorF.White);

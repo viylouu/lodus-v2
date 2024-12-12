@@ -1,4 +1,5 @@
 using System.Numerics;
+using thrustr.utils;
 
 partial class lodus {
     static byte chunk_size = 16;
@@ -17,15 +18,13 @@ partial class lodus {
 
         for(int x = 0; x < chunk_size; x++)
             for(int y = 0; y < chunk_size; y++)
-                for(int z = 0; z < chunk_size; z++) {
-                    chunks[cur_chunk].data[x,y,z] = 1;
+                for(int z = 0; z < chunk_size; z++) {// 0, 1
+                    chunks[cur_chunk].data[x,y,z] = 0x01;
                 }
 
         int i = 0;
 
-        List<Vector3> verts = new();
         List<uint> inds = new();
-        List<Vector2> uvs = new();
         List<vsdata> vsdat = new();
 
         for(int x = 0; x < chunk_size; x++)
@@ -42,12 +41,18 @@ partial class lodus {
                                 chunks[cur_chunk].data[x,y,z+1] == 0
                             ) : true
                         ) {
-                            for(int a = 0; a < cube_verts.Length; a++) {
-                                Vector3 vert = cube_verts[a] + new Vector3(x,y,z)*2;
-                                verts.Add(vert);
-                                uvs.Add(cube_uvs[a]);
-                                vsdat.Add(new() { vert = vert, uv = cube_uvs[a] });
-                            }
+                            for(int a = 0; a < cube_verts.Length; a++)
+                                vsdat.Add(new() { 
+                                    vert = cube_verts[a] + new Vector3(x,y,z)*2,
+
+                                    uv = ( 
+                                        cube_uvs[a] + 
+                                        new Vector2(
+                                            math.floor(chunks[cur_chunk].data[x,y,z]/256f),
+                                            chunks[cur_chunk].data[x,y,z]%256
+                                        ) 
+                                    )/256f 
+                                });
 
                             for(int a = 0; a < cube_inds.Length; a++)
                                 inds.Add((uint)(cube_inds[a] + i));
@@ -55,9 +60,7 @@ partial class lodus {
                             i+=cube_verts.Length;
                         }
 
-        chunks[cur_chunk].mesh_verts = verts.ToArray();
         chunks[cur_chunk].mesh_inds = inds.ToArray();
-        chunks[cur_chunk].mesh_uvs = uvs.ToArray();
         chunks[cur_chunk].mesh_data = vsdat.ToArray();
     }
 
