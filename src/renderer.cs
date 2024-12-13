@@ -68,14 +68,18 @@ partial class lodus {
         vertex_shader.view = Matrix4x4.CreateTranslation(cam) * Matrix4x4.CreateRotationY(pitchr) * Matrix4x4.CreateRotationX(yawr);
         vertex_shader.proj = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 3f, c.Width / (float)c.Height, 0.1f, 1024f);
 
+        vertex_shader.time = Time.TotalTime;
+
         fragment_shader.cam = cam;
+
+        fragment_shader.time = Time.TotalTime;
 
         c.Fill(fragment_shader, vertex_shader);
         c.Mask(dmask);
         c.WriteMask(dmask, null);
 
         for (int i = 0; i < chunks.Count; i++) {
-            vertex_shader.world = Matrix4x4.CreateTranslation(chunks[i].pos * chunk_size * 2);
+            vertex_shader.world = Matrix4x4.CreateTranslation(chunks[i].pos * chunk_size);
             vertex_shader.chunk_pos = chunks[i].pos;
 
             c.DrawTriangles<vsdata>(chunks[i].mesh_data, chunks[i].mesh_inds);

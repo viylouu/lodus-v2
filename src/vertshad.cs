@@ -1,5 +1,6 @@
 using System.Numerics;
 using SimulationFramework.Drawing.Shaders;
+using static SimulationFramework.Drawing.Shaders.ShaderIntrinsics;
 
 public class vertshad : VertexShader {
     [VertexData]
@@ -12,6 +13,8 @@ public class vertshad : VertexShader {
     public Matrix4x4 proj;
 
     public Vector3 chunk_pos;
+
+    public float time;
 
     [VertexShaderOutput]
     Vector2 vert_uv;
@@ -27,7 +30,7 @@ public class vertshad : VertexShader {
         res = Vector4.Transform(res, proj);
 
         vert_uv = vsdat.uv;
-        vert_pos = vsdat.vert + chunk_pos*chunk_size*2;
+        vert_pos = vsdat.vert + chunk_pos*chunk_size;
 
         return res;
     }

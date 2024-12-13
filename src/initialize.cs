@@ -27,9 +27,9 @@ partial class lodus {
 
         dmask = Graphics.CreateDepthMask(960,540);
 
-        for(int x = 0; x < 3; x++)
+        for(int x = 0; x < 5; x++)
             for(int y = 0; y < 3; y++)
-                for(int z = 0; z < 3; z++)
+                for(int z = 0; z < 5; z++)
                     gen_new_chunk(new(x,y,z));
 
         Mouse.Visible = false;

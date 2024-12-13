@@ -15,6 +15,8 @@ public class fragshad : CanvasShader {
 
     public ITexture tex;
 
+    public float time;
+
     public override ColorF GetPixelColor(Vector2 pos) {
         float depth = 1-Distance(vert_pos, -cam) / 128f;
 
