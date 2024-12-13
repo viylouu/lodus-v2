@@ -20,6 +20,8 @@ public class math {
     public const float r2d = 57.29577951308232087679815f;
     /// <summary>euler's number</summary>
     public const float e = 2.71828182845904523536029f;
+    /// <summary>a quarter the circumference of a circle with a radius of 1 or 90 degrees in radians</summary>
+    public const float hpi = 1.57079632679489661923132f;
 
     //misc
 
@@ -53,12 +55,16 @@ public class math {
     public static float dist(Vector2 a, float x, float y) => sqrt(sqr(x - a.X) + sqr(y - a.Y));
     /// <summary>calculates the distance between two points</summary>
     public static float dist(float u, float v, float x, float y) => sqrt(sqr(x - u) + sqr(y - v));
+    /// <summary>calculates the distance between two points</summary>
+    public static float dist(Vector3 a, Vector3 b) => sqrt(sqr(b.X - a.X) + sqr(b.Y - a.Y) + sqr(b.Z - a.Z));
     /// <summary>calculates the squared distance between two points</summary>
     public static float sqrdist(Vector2 a, Vector2 b) => sqr(b.X - a.X) + sqr(b.Y - a.Y);
     /// <summary>calculates the squared distance between two points</summary>
     public static float sqrdist(Vector2 a, float x, float y) => sqr(x - a.X) + sqr(y - a.Y);
     /// <summary>calculates the squared distance between two points</summary>
     public static float sqrdist(float u, float v, float x, float y) => sqr(x - u) + sqr(y - v);
+    /// <summary>calculates the squared distance between two points</summary>
+    public static float sqrdist(Vector3 a, Vector3 b) => sqr(b.X - a.X) + sqr(b.Y - a.Y) + sqr(b.Z - a.Z);
     ///<summary>returns the biggest number between 2 numbers</summary>
     public static float max(float a, float b) => MathF.Max(a, b);
     ///<summary>returns the smallest number between 2 numbers</summary>
