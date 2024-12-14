@@ -1,4 +1,6 @@
+using System.ComponentModel.Design;
 using System.Numerics;
+using ImGuiNET;
 using SimulationFramework;
 using SimulationFramework.Drawing;
 using SimulationFramework.Input;
@@ -35,7 +37,7 @@ partial class lodus {
 
     static bool inui;
 
-    static int render_dist = 6;
+    static int render_dist = 4;
 
     static int ax, ay, az, bx, by, bz;
 
@@ -50,6 +52,8 @@ partial class lodus {
         camera();
 
         misc_keybinds();
+
+        pausemenu();
 
         vertex_shader.view = Matrix4x4.CreateTranslation(-cam) * Matrix4x4.CreateRotationY(pitchr) * Matrix4x4.CreateRotationX(yawr);
         vertex_shader.proj = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 3f, c.Width / (float)c.Height, 0.1f, 1024f);
@@ -85,7 +89,13 @@ partial class lodus {
 
                     chunks.TryGetValue(pos, out chunk? cur);
 
-                    if(cur == null)
+                    if(cur == null) {
+                        gen_new_chunk(pos);
+
+                        continue;
+                    }
+
+                    if(cur.genning)
                         continue;
 
                     if(math.sqrdist(cam, pos * chunk_size) < precalc_max_chunk_dist) {
@@ -99,6 +109,7 @@ partial class lodus {
         c.ResetState();
 
         fontie.rendertext(c, fontie.dfont, $"{math.round(1f / Time.DeltaTime)} fps", 3, 3, ColorF.White);
+        fontie.rendertext(c, fontie.dfont, $"{chunks.Count} chunks", 3, 4+fontie.dfont.charh, ColorF.White);
     }
 
     static void misc_keybinds() {
@@ -113,51 +124,26 @@ partial class lodus {
 
         if (Keyboard.IsKeyPressed(Key.Escape))
             Environment.Exit(0);
+
+        if(Keyboard.IsKeyPressed(Key.Tab))
+            inui = !inui;
     }
 
-    static void camera() {
-        if(inui)
-            return;
+    static void pausemenu() {
+        if(inui) {
+            Mouse.Visible = true;
 
-        float center_x = math.round(precalc_half_window_width),
-              center_y = math.round(precalc_half_window_height);
+            ImGui.Begin("pausemenu");
 
-        pitch += (math.round(Mouse.Position.X) - center_x) * .125f;
-        yaw += (math.round(Mouse.Position.Y) - center_y) * .125f;
+            int p_rend_dist = render_dist;
+            ImGui.InputInt("render distance", ref render_dist);
 
-        yaw = math.clamp(yaw, -90, 90);
+            if(render_dist != p_rend_dist)
+                calc_precalcs();
 
-        pitchs += ease.dyn(pitchs, pitch, 6);
-        yaws += ease.dyn(yaws, yaw, 6);
-
-        pitchr = math.rad(pitchs);
-        yawr = math.rad(yaws);
-
-        Mouse.Position = new(center_x, center_y);
-    }
-
-    static void movement() {
-        if(inui)
-            return;
-
-        float speed = 16;
-
-        float cos_pitchr = math.cos(pitchr);
-        float sin_pitchr = math.sin(pitchr);
-
-        if (Keyboard.IsKeyDown(Key.W))
-            cam -= new Vector3(math.cos(pitchr + math.hpi), 0, math.sin(pitchr + math.hpi)) * Time.DeltaTime * speed;
-        if (Keyboard.IsKeyDown(Key.S))
-            cam += new Vector3(math.cos(pitchr + math.hpi), 0, math.sin(pitchr + math.hpi)) * Time.DeltaTime * speed;
-
-        if (Keyboard.IsKeyDown(Key.A))
-            cam -= new Vector3(cos_pitchr, 0, sin_pitchr) * Time.DeltaTime * speed;
-        if (Keyboard.IsKeyDown(Key.D))
-            cam += new Vector3(cos_pitchr, 0, sin_pitchr) * Time.DeltaTime * speed;
-
-        if (Keyboard.IsKeyDown(Key.Space))
-            cam.Y += Time.DeltaTime * speed;
-        if (Keyboard.IsKeyDown(Key.LeftShift))
-            cam.Y -= Time.DeltaTime * speed;
+            ImGui.End();
+        }
+        else
+            Mouse.Visible = false;
     }
 } 

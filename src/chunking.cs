@@ -4,13 +4,41 @@ using thrustr.utils;
 partial class lodus {
     static byte chunk_size = 16;
 
-    static void gen_new_chunk(Vector3 pos) {
+    static FastNoiseLite fnl;
+    static Random r = new();
+
+    static int asyncs = 0;
+    static int maxasyncs = 256;
+
+    static void init_chunk_gen() {
+        fnl = new();
+        fnl.SetSeed(r.Next(int.MinValue, int.MaxValue));
+    }
+
+    static async void gen_new_chunk(Vector3 pos) {
+        lock(chunks) {
+            if(chunks.ContainsKey(pos))
+                chunks.Remove(pos);
+
+            chunks.Add(pos, new() { genning = true });
+        } 
+
         chunk c = new() { data = new byte[chunk_size,chunk_size,chunk_size] };
 
         for(int x = 0; x < chunk_size; x++)
             for(int y = 0; y < chunk_size; y++)
                 for(int z = 0; z < chunk_size; z++) {
-                    c.data[x,y,z] = 0x00;
+                    c.data[x,y,z] = 0xFF;
+
+                    if(fnl.GetNoise(x+pos.X*chunk_size,y+pos.Y*chunk_size,z+pos.Z*chunk_size) >= 0)
+                        c.data[x,y,z] = 0x20;
+
+                    asyncs++;
+
+                    if(asyncs >= maxasyncs) {
+                        asyncs = 0;
+                        await Task.Delay(1);
+                    }
                 }
 
         int i = 0;
@@ -57,6 +85,13 @@ partial class lodus {
                                     inds.Add((uint)(face_inds[face, a] + i));
                                 
                                 i += 4;
+
+                                asyncs++;
+
+                                if(asyncs >= maxasyncs) {
+                                    asyncs = 0;
+                                    await Task.Delay(1);
+                                }
                             }
                         }
                     }
@@ -64,7 +99,9 @@ partial class lodus {
         c.mesh_inds = inds.ToArray();
         c.mesh_data = vsdat.ToArray();
 
+        c.genning = false;
+
         lock(chunks)
-            chunks.Add(pos, c);
+            chunks[pos] = c;
     }
 }

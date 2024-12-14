@@ -3,4 +3,6 @@ public class chunk {
     public vsdata[] mesh_data;
 
     public byte[,,] data;
+
+    public bool genning;
 }

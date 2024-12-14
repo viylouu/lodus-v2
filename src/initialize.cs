@@ -26,19 +26,23 @@ partial class lodus {
 
         dmask = Graphics.CreateDepthMask(960,540);
 
-        Parallel.For(0, 24, x => {
+        init_chunk_gen(); 
+
+        /*Parallel.For(0, 24, x => {
             for(int y = 0; y < 6; y++)
                 for(int z = 0; z < 24; z++)
                     gen_new_chunk(new(x,y,z));
-        });
+        });*/
 
         Mouse.Visible = false;
 
-        cam = new(12*chunk_size,6*chunk_size+4,12*chunk_size);
-
         //precalculate values
+        calc_precalcs();
+    }
+
+    static void calc_precalcs() {
         precalc_fog_scaling_factor = 1f/((render_dist-1)*chunk_size*.5f);
-        precalc_max_chunk_dist = (int)math.sqr(chunk_size*render_dist*2);
+        precalc_max_chunk_dist = (int)math.sqr(chunk_size*render_dist);
         precalc_chunk_offset = Vector3.One*-.5f*chunk_size;
         precalc_1div_chunk_size = 1f/chunk_size;
         precalc_half_window_width = 960/2f;
