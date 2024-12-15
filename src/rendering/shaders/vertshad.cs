@@ -21,6 +21,9 @@ public class vertshad : VertexShader {
     [VertexShaderOutput]
     Vector3 vert_pos;
 
+    [VertexShaderOutput]
+    Vector3 v_chunk_pos;
+
     [UseClipSpace]
     public override Vector4 GetVertexPosition() {
         Vector4 res = new(vsdat.vert, 1);
@@ -30,6 +33,7 @@ public class vertshad : VertexShader {
 
         vert_uv = vsdat.uv;
         vert_pos = vsdat.vert + chunk_pos*chunk_size - new Vector3(chunk_size*.5f);
+        v_chunk_pos = chunk_pos;
 
         return res;
     }

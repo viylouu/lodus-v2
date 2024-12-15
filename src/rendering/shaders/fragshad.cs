@@ -22,6 +22,9 @@ public class fragshad : CanvasShader {
     [VertexShaderOutput]
     Vector3 vert_pos;
 
+    [VertexShaderOutput]
+    Vector3 v_chunk_pos;
+
     public Vector3 cam;
 
     public ITexture tex;
@@ -35,7 +38,7 @@ public class fragshad : CanvasShader {
     public float fog_scaling_factor;
 
     public override ColorF GetPixelColor(Vector2 pos) {
-        float depth = 1-Distance(vert_pos, cam) * fog_scaling_factor;
+        /*float depth = 1-Distance(vert_pos, cam) * fog_scaling_factor;
 
         depth += .65f;
 
@@ -54,6 +57,12 @@ public class fragshad : CanvasShader {
             Lerp(100/255f, x.R, depth),
             Lerp(149/255f, x.G, depth),
             Lerp(237/255f, x.B, depth)
+        );*/
+
+        return new ColorF(
+            Mod(v_chunk_pos.X/4f,1),
+            Mod(v_chunk_pos.Y/4f,1),
+            Mod(v_chunk_pos.Z/4f,1)
         );
     }
 }

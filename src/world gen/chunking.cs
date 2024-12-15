@@ -1,4 +1,5 @@
 using System.Numerics;
+using SimulationFramework.Drawing.Shaders.Compiler.Expressions;
 using thrustr.utils;
 
 partial class lodus {
@@ -13,13 +14,18 @@ partial class lodus {
     static void init_chunk_gen() {
         fnl = new();
         fnl.SetSeed(r.Next(int.MinValue, int.MaxValue));
+        fnl.SetFractalType(FastNoiseLite.FractalType.FBm);
+        fnl.SetFrequency(.04f);
     }
 
-    static async void gen_new_chunk(Vector3 pos) {
-        lock(chunks) {
-            if(chunks.ContainsKey(pos))
-                chunks.Remove(pos);
+    static async void gen_new_chunk(Vector3Int pos) {
+        lock(chunks) { 
+            if(chunks.ContainsKey(pos)) {
+                Console.WriteLine($"there is already a chunk at ({pos.X}, {pos.Y}, {pos.Z})");
+                return;
+            }
 
+            Console.WriteLine($"generating a chunk at ({pos.X}, {pos.Y}, {pos.Z})");
             chunks.Add(pos, new() { genning = true });
         } 
 

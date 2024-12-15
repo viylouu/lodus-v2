@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Numerics;
 using ImGuiNET;
@@ -8,10 +9,48 @@ using SimulationFramework.Input;
 using thrustr.basic;
 using thrustr.utils;
 
+public struct Vector3Int
+{
+    public int X, Y, Z;
+
+    public Vector3Int(int x, int y, int z)
+    {
+        X = x;
+        Y = y;
+        Z = z;
+    }
+
+    // Override Equals and GetHashCode for consistent comparison
+    public override bool Equals(object obj)
+    {
+        if (obj is Vector3Int other)
+        {
+            return X == other.X && Y == other.Y && Z == other.Z;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return X ^ Y ^ Z; // Simple hash code using XOR
+    }
+
+    // Implement equality operators
+    public static bool operator ==(Vector3Int left, Vector3Int right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Vector3Int left, Vector3Int right)
+    {
+        return !(left == right);
+    }
+}
+
 partial class lodus {
     /* chunk data */
 
-    static Dictionary<Vector3, chunk> chunks = new();
+    static Dictionary<Vector3Int, chunk> chunks = new();
 
     /* shaders */
 
@@ -55,8 +94,11 @@ partial class lodus {
 
         pausemenu();
 
-        vertex_shader.view = Matrix4x4.CreateTranslation(-cam) * Matrix4x4.CreateRotationY(pitchr) * Matrix4x4.CreateRotationX(yawr);
-        vertex_shader.proj = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 3f, c.Width / (float)c.Height, 0.1f, 1024f);
+        Matrix4x4 view_matrix = Matrix4x4.CreateTranslation(-cam) * Matrix4x4.CreateRotationY(pitchr) * Matrix4x4.CreateRotationX(yawr);
+        Matrix4x4 proj_matrix = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 3f, c.Width / (float)c.Height, 0.1f, 1024f);
+
+        vertex_shader.view = view_matrix;
+        vertex_shader.proj = proj_matrix;
 
         vertex_shader.time = Time.TotalTime;
 
@@ -75,21 +117,23 @@ partial class lodus {
 
         Vector3 cams = cam * precalc_1div_chunk_size;
 
-        ax = (int)(cams.X-render_dist);
-        bx = (int)(cams.X+render_dist);
-        ay = (int)(cams.Y-render_dist);
-        by = (int)(cams.Y+render_dist);
-        az = (int)(cams.Z-render_dist);
-        bz = (int)(cams.Z+render_dist);
+        ax = (int)math.floor(cams.X)-render_dist;
+        bx = (int)math.floor(cams.X)+render_dist;
+        ay = (int)math.floor(cams.Y)-render_dist;
+        by = (int)math.floor(cams.Y)+render_dist;
+        az = (int)math.floor(cams.Z)-render_dist;
+        bz = (int)math.floor(cams.Z)+render_dist;
 
         for(int x = ax; x < bx; x++)
             for(int y = ay; y < by; y++)
                 for(int z = az; z < bz; z++) {
-                    Vector3 pos = new(x,y,z);
+                    Vector3Int pos = new(x,y,z);
 
-                    chunks.TryGetValue(pos, out chunk? cur);
+                    bool has_chunk = chunks.TryGetValue(pos, out chunk? cur);
 
-                    if(cur == null) {
+                    Vector3 pos_vec = new(pos.X,pos.Y,pos.Z);
+
+                    if(!has_chunk) {
                         gen_new_chunk(pos);
 
                         continue;
@@ -98,9 +142,9 @@ partial class lodus {
                     if(cur.genning)
                         continue;
 
-                    if(math.sqrdist(cam, pos * chunk_size) < precalc_max_chunk_dist) {
-                        vertex_shader.world = Matrix4x4.CreateTranslation(pos * chunk_size + precalc_chunk_offset);
-                        vertex_shader.chunk_pos = pos;
+                    if(math.sqrdist(cam, pos_vec * chunk_size) < precalc_max_chunk_dist) {
+                        vertex_shader.world = Matrix4x4.CreateTranslation(pos_vec * chunk_size + precalc_chunk_offset);
+                        vertex_shader.chunk_pos = pos_vec;
 
                         c.DrawTriangles<vsdata>(cur.mesh_data, cur.mesh_inds);
                     }
